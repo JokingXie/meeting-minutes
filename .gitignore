@@ -1,1 +1,3 @@
 deploy_key
+.env
+.main.py
