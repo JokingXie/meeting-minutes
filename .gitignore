@@ -7,3 +7,7 @@ deploy_key
 user_prompt.txt
 meeting_transcript.txt
 meeting_analysis.md
+
+# cache folder
+temp/
+cache/
