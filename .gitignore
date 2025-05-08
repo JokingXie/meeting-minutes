@@ -2,3 +2,8 @@ deploy_key
 .env
 .main.py
 .DS_Store
+
+# intermediate files
+user_prompt.txt
+meeting_transcript.txt
+meeting_analysis.md
