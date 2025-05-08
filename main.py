@@ -17,8 +17,42 @@ transcript_processor = SpeakerTranscript()
 CACHE_DIR = Path("./cache")
 CACHE_DIR.mkdir(exist_ok=True)
 
+@app.get("/")
+async def root():
+
+    """API根端点
+    
+    Returns:
+        dict: 包含项目信息和可用端点说明
+    """
+
+    return {
+        "project": "会议纪要生成系统",
+        "description": "通过AI自动分析会议录音，生成结构化会议纪要",
+        "endpoints": {
+            "upload_audio": "POST /upload_audio",
+            "generate_report": "POST /generate_report",
+            "download_report": "GET /download_report/{task_id}"
+        },
+        "interactive_docs": "http://localhost:7860/docs",
+        "version": "1.0.0"
+    }
+
 @app.post("/upload_audio")
 async def upload_audio(audio: UploadFile = File(...)):
+
+    """处理上传的音频文件并生成预览
+    
+    Args:
+        audio (UploadFile): 上传的音频文件(wav/mp3格式)
+        
+    Returns:
+        dict: 包含任务ID、内容预览和下一步指引
+        
+    Raises:
+        HTTPException: 音频处理失败时返回500错误
+    """
+
     """第一步：上传音频并生成真实预览"""
     try:
         task_id = str(uuid.uuid4())
@@ -57,8 +91,24 @@ async def generate_report(
     task_id: str = Form(...),
     speakers: str = Form(...),
     meeting_time: str = Form(...),
-    meeting_place: str = Form("")
+    meeting_place: str = Form(...)
 ):
+    
+    """根据用户输入生成最终会议报告
+    
+    Args:
+        task_id (str): 上传音频时获得的任务ID
+        speakers (str): 与会人员名单，逗号分隔
+        meeting_time (str): 会议时间，格式"YYYY-MM-DD HH:MM"
+        meeting_place (str): 会议地点，可选
+        
+    Returns:
+        dict: 包含报告下载URL和摘要
+        
+    Raises:
+        HTTPException: 任务不存在(404)或处理失败(500)
+    """
+
     """第二步：生成完整报告（调用LLM）"""
     try:
         # 验证任务文件存在
@@ -87,7 +137,7 @@ async def generate_report(
         # 4. 调用LLM分析
         report_path = CACHE_DIR / f"{task_id}_report.md"
         analysis_result = analyze_transcript(
-            user_prompt,
+            user_prompt_path,
             output_file=str(report_path)
         )
         
@@ -102,6 +152,19 @@ async def generate_report(
     
 @app.get("/download_report/{task_id}")
 async def download_report(task_id: str):
+
+    """下载生成的会议报告
+    
+    Args:
+        task_id (str): 任务ID
+        
+    Returns:
+        FileResponse: 会议纪要Markdown文件
+        
+    Raises:
+        HTTPException: 报告不存在时返回404
+    """
+
     """下载最终报告"""
     report_path = CACHE_DIR / f"{task_id}_report.md"
     if not report_path.exists():
