@@ -12,6 +12,21 @@ def analyze_transcript(
     output_file: str = "meeting-analysis.md" # 分析结果输出路径
 ) -> str:
     
+    """分析会议转录文本并生成报告
+    
+    Args:
+        user_prompt_file (str): 用户提示词文件路径，包含会议基本信息和转录文本
+        system_prompt_file (str): 系统提示词模板文件路径，定义分析框架
+        output_file (str): 分析结果输出文件路径(.md格式)
+        
+    Returns:
+        str: 生成的会议分析报告内容
+        
+    Raises:
+        FileNotFoundError: 当提示词文件不存在时抛出
+        RuntimeError: API调用失败时抛出
+    """
+    
     # 读取系统提示词
     try:
         with open(system_prompt_file, 'r', encoding='utf-8') as f:
