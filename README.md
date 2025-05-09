@@ -119,6 +119,7 @@ python main.py
 ### 查看FastAPI接口文档
 
 对于docker容器中运行的程序，可部署在 `0.0.0.0`，以供宿主机通过 `localhost` 对应端口进行监听。
+可在 `localhost:7860/docs` 通过FastAPI接口文档对对应接口进行测试。
 
 ### 使用示例
 
