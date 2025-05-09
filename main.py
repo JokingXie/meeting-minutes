@@ -94,13 +94,13 @@ async def generate_report(
     meeting_place: str = Form(...)
 ):
     
-    """根据用户输入生成最终会议报告
+    """读取用户输入并生成最终会议报告
     
     Args:
         task_id (str): 上传音频时获得的任务ID
         speakers (str): 与会人员名单，逗号分隔
         meeting_time (str): 会议时间，格式"YYYY-MM-DD HH:MM"
-        meeting_place (str): 会议地点，可选
+        meeting_place (str): 会议地点
         
     Returns:
         dict: 包含报告下载URL和摘要
