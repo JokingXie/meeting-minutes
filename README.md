@@ -35,6 +35,14 @@ graph TD
 pip install -r requirements.txt
 ```
 
+### 配置环境变量
+```bash
+cp .env.example .env
+```
+
+对`.env`进行修改，配置对应的`DEEPSEEK_API_KEY`和系统提示词路径（例如`SYSTEM_PROMPT_PATH=/app/.system_prompt.txt`）。
+亦可直接修改`llm_analyzer.py`配置不同LLM模型。
+
 ---
 
 ### 对于Terminal的方式
@@ -48,6 +56,7 @@ python main-terminal.py
 - 支持格式：MP3, WAV等格式音频文件
 - 默认示例：`/sample-diarization-test.wav`
 - 备用URL：自动回退到阿里云示例音频
+- 提供了示例音频样例，如需对自己的音频进行分析，应修改`main-terminal.py`中`input_file = "/app/sample-diarization-test.wav"`内容至对应音频路径。
 
 ### 输出文件
 1. `meeting_transcript.txt` - 原始转录文本（含说话人标签）
