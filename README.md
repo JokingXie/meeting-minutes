@@ -43,6 +43,21 @@ cp .env.example .env
 对`.env`进行修改，配置对应的`DEEPSEEK_API_KEY`和系统提示词路径（例如`SYSTEM_PROMPT_PATH=/app/.system_prompt.txt`）。
 亦可直接修改`llm_analyzer.py`配置不同LLM模型。
 
+### 配置环境变量
+```bash
+cp .env.example .env
+```
+
+对`.env`进行修改，配置对应的`DEEPSEEK_API_KEY`和系统提示词路径（例如`SYSTEM_PROMPT_PATH=/app/.system_prompt.txt`）。
+亦可直接修改`llm_analyzer.py`配置不同LLM模型。
+
+### 配置环境变量
+```bash
+cp .env.example .env
+```
+对`.env`进行修改，配置对应的`DEEPSEEK_API_KEY`和系统提示词路径（例如`SYSTEM_PROMPT_PATH=/app/.system_prompt.txt`）。
+亦可直接修改`llm_analyzer.py`配置不同LLM模型。
+
 ---
 
 ### 对于Terminal的方式
