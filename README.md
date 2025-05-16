@@ -30,12 +30,83 @@ graph TD
 
 ## 快速开始
 
-### 安装依赖
+可通过`docker`或`常规配置`的方式进行搭建。
+
+---
+
+### 使用docker
+
+#### 终端操作步骤
+
+1. 拉取镜像
+```bash
+docker pull --platform linux/amd64 python:3.11
+```
+
+2. 验证镜像
+```bash
+docker images | grep python
+```
+
+3. 创建容器 (需修改路径)
+```bash
+docker run -itd \
+  --platform linux/amd64 \
+  -p 7860:7860 \
+  -v /your-path-to-meeting-minutes-folder:/app \
+  --name meeting_minutes \
+  python:3.11
+```
+
+4. 验证容器
+```bash
+docker ps -a | grep meeting_minutes
+```
+
+5. 进入容器配置
+```bash
+docker exec -it meeting_minutes bash
+cd app
+
+# 配置环境变量 (复制后需对.env更改)
+cp .env.example .env
+
+# 安装依赖
+apt-get update && apt-get install -y libsox-dev
+apt install ffmpeg
+pip install -r requirements.txt
+whisper download medium
+pip install modelscope[audio] -f https://modelscope.oss-cn-beijing.aliyuncs.com/releases/repo.html
+
+# 运行代码 (以Gradio方式为例)
+python main-gradio.py
+```
+
+#### 关于报错
+
+1. `libsox`与`pytorch`相关：
+```bash
+OSError: libsox.so: cannot open shared object file: No such file or directory
+```
+
+根据[Hugging Face 讨论](https://huggingface.co/spaces/facebook/seamless-streaming/discussions/32)：
+
+```bash
+apt-get update && apt-get install -y libsox-dev
+pip uninstall torchaudio
+pip install torchaudio
+```
+
+---
+
+### 使用常规配置
+
+#### 安装依赖
 ```bash
 pip install -r requirements.txt
 ```
 
-### 配置环境变量
+#### 配置环境变量
 ```bash
 cp .env.example .env
 ```
@@ -45,24 +116,24 @@ cp .env.example .env
 
 ---
 
-### 对于Terminal的方式
+#### 对于Terminal的方式
 
-### 运行程序
+#### 运行程序
 ```bash
 python main-terminal.py
 ```
 
-### 输入要求
+#### 输入要求
 - 支持格式：MP3, WAV等格式音频文件
 - 默认示例：`/sample-diarization-test.wav`
 - 备用URL：自动回退到阿里云示例音频
 - 提供了示例音频样例，如需对自己的音频进行分析，应修改`main-terminal.py`中`input_file = "/app/sample-diarization-test.wav"`内容至对应音频路径。
 
-### 输出文件
+#### 输出文件
 1. `meeting_transcript.txt` - 原始转录文本（含说话人标签）
 2. `meeting_analysis.md` - 结构化分析报告
 
-### 使用示例
+#### 使用示例
 
 ```bash
 python main-terminal.py
@@ -89,58 +160,58 @@ python main-terminal.py
 
 ---
 
-### 对于Gradio的方式
+#### 对于Gradio的方式
 
-### 运行程序
+#### 运行程序
 ```bash
 python main-gradio.py
 ```
 
-### 查看Gradio界面
+#### 查看Gradio界面
 
 对于docker容器中运行的程序，可部署在 `0.0.0.0`，以供宿主机通过 `localhost` 对应端口进行监听。
 
-### 使用示例
+#### 使用示例
 
 <img src="docs/images/Gradio.jpg" alt="界面预览" width="800" style="border: 1px solid #eee;">
 
 *图：会议纪要生成系统的Gradio交互界面*
 
-### 输入要求
+#### 输入要求
 - 支持格式：MP3, WAV等格式音频文件
 - 默认示例：`/sample-diarization-test.wav`
 - 备用URL：自动回退到阿里云示例音频
 
-### 输出文件
+#### 输出文件
 1. `meeting_transcript.txt` - 原始转录文本（含说话人标签）
 2. `meeting_analysis.md` - 结构化分析报告
 
 ---
 
-### 对于FastAPI的方式
+#### 对于FastAPI的方式
 
-### 运行程序
+#### 运行程序
 ```bash
 python main.py
 ```
 
-### 查看FastAPI接口文档
+#### 查看FastAPI接口文档
 
 对于docker容器中运行的程序，可部署在 `0.0.0.0`，以供宿主机通过 `localhost` 对应端口进行监听。
 可在 `localhost:7860/docs` 通过FastAPI接口文档对对应接口进行测试。
 
-### 使用示例
+#### 使用示例
 
 <img src="docs/images/FastAPI.jpg" alt="界面预览" width="800" style="border: 1px solid #eee;">
 
 *图：会议纪要生成系统的FastAPI交互界面*
 
-### 输入要求
+#### 输入要求
 - 支持格式：MP3, WAV等格式音频文件
 - 默认示例：`/sample-diarization-test.wav`
 - 备用URL：自动回退到阿里云示例音频
 
-### 输出文件
+#### 输出文件
 - 根据创建的```task_id```，在`/cache`目录下创建以下文件：
   1. 用户上传音频：`{task_id}_full.wav`
   2. 带说话人识别的会议音频转译：`{task_id}_full.txt`

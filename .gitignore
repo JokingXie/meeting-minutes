@@ -11,4 +11,7 @@ meeting_analysis.md
 # cache folder
 temp/
 cache/
-/__pycache__
+__pycache__/
+
+# others
+notes.md
