@@ -11,3 +11,4 @@ meeting_analysis.md
 # cache folder
 temp/
 cache/
+/__pycache__
