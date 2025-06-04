@@ -62,31 +62,38 @@ with gr.Blocks(title="会议纪要生成系统") as demo:
     audio_state = gr.State()
     
     with gr.Tab("会议处理"):
-        with gr.Row():
-            with gr.Column():
-                audio_input = gr.Audio(type="filepath", label="上传会议录音")
-                upload_btn = gr.Button("开始处理", variant="primary")
+        with gr.Row(equal_height=True):
+            with gr.Column(scale=1):  # 设置较小的比例
+                audio_input = gr.Audio(scale=10, type="filepath", label="上传会议录音")
+                upload_btn = gr.Button(scale=1, value="开始处理", variant="primary")
                 
-            with gr.Column():
-                preview_output = gr.Textbox(label="内容预览", lines=10)
-        
-        with gr.Row():
-        # 添加提示信息
-            gr.Markdown("""
-            <div style="color: #ff8c00; background-color: #fff4e6; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-            ⚠️ 请等待内容预览生成成功，输入补充信息后，再点击"生成报告"按钮
-            </div>
-        """)       
+            with gr.Column(scale=6):  # 设置较大的比例
+                preview_output = gr.Textbox(label="内容预览", lines=25, min_width=600)  # 增加行数和最小宽度    
             
-        with gr.Row():
-            speaker_input = gr.Textbox(label="发言人信息", placeholder="请按序输入对应的发言人信息")
-            meeting_time = gr.Textbox(label="会议时间", placeholder="如：2024年9月19日 星期四 10:00")
-            meeting_place = gr.Textbox(label="会议地点", placeholder="例如：会议室302")
-            
-        process_btn = gr.Button("生成报告", variant="primary")
+        with gr.Row(equal_height=True):
+
+            with gr.Column(scale=1):            
+                # 添加提示信息
+                gr.Markdown("""
+                <div style="color: #ff8c00; background-color: #fff4e6; padding: 10px; border-radius: 5px; margin-bottom: 10px; height: 100%;">
+                ⚠️ 请等待内容预览生成成功，输入补充信息后，再点击"生成报告"按钮。
+                </div>
+                """)  
+
+                process_btn = gr.Button(scale=1, value="生成报告", variant="primary")
+
+            with gr.Row(scale=4):
+                speaker_input = gr.Textbox(scale=3, label="发言人信息", placeholder="请按序输入对应的发言人信息")
+                meeting_time = gr.Textbox(scale=1, label="会议时间", placeholder="如：2024年9月19日 星期四 10:00")
+                meeting_place = gr.Textbox(scale=1, label="会议地点", placeholder="例如：会议室302")
+
+        with gr.Tab("大纲报告"):
+            concise_report_output = gr.Markdown(label="大纲报告")
+            concise_download = gr.File(label="下载报告")
         
-        report_output = gr.Markdown(label="分析报告")
-        download = gr.File(label="下载报告")
+        with gr.Tab("通用报告"):
+            general_report_output = gr.Markdown(label="通用报告")
+            general_download = gr.File(label="下载报告")
 
     # 事件绑定
     upload_btn.click(
@@ -98,7 +105,7 @@ with gr.Blocks(title="会议纪要生成系统") as demo:
     process_btn.click(
         generate_report,
         inputs=[transcript_state, speaker_input, meeting_time, meeting_place, audio_state],
-        outputs=[report_output, download]
+        outputs=[concise_report_output, general_report_output, concise_download, general_download]
     )
 
 if __name__ == "__main__":
