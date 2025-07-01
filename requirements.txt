@@ -1,0 +1,22 @@
+# 核心依赖
+gradio>=3.0
+python-dotenv>=1.0
+datasets<3
+openai
+
+# 语音处理相关
+modelscope>=1.0
+torch>=2.0
+torchaudio>=2.0
+librosa>=0.10
+openai-whisper
+
+# 其他工具
+numpy>=1.0
+pydub>=0.25
+ffmpeg-python>=0.2
+addict==2.4.0
+simplejson==3.20.1
+sortedcontainers==2.4.0
+hdbscan
+umap

@@ -1,0 +1,9 @@
+/used_audio/
+/savePath/
+/models/
+/.gradio/
+/__pycache__/
+
+.env
+
+.DS_Store
